@@ -3,6 +3,7 @@
 
 # Connect to sharepoint service.
 $credential = Get-Credential
+$admin = $credential.UserName
 $sharepoint_admin_url = "https://manuchar-admin.sharepoint.com"
 Connect-SPOService -Url $sharepoint_admin_url -Credential $credential
 
