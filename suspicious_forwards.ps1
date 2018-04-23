@@ -109,29 +109,6 @@ function GetSuspiciousForwardingRules(){
 	return $suspicious_rules
 }
 
-function CheckMemberships([String[]] $Groups) {
-	If( -Not $Groups ){
-		$Groups = GetMemberGroups
-	}
-	Get-Mailbox -ResultSize Unlimited | ForEach-Object {
-		If ( ($_.IsShared -eq $false) -and ($_.AccountDisabled -eq $false) -and ($_.IsResource -eq $false) ) {
-			$Memberships = ValidateMembership -Email $_.PrimarySMTPAddress -Groups $Groups
-			$Object = New-Object -TypeName PSObject
-			$Object | Add-Member -MemberType NoteProperty -Name Email -Value $_.PrimarySMTPAddress
-			If ($Memberships) {
-				$Object | Add-Member -MemberType NoteProperty -Name IsMember -Value $true
-				$Object | Add-Member -MemberType NoteProperty -Name MembershipCount -Value $Memberships.Count
-			} Else {
-				$Object | Add-Member -MemberType NoteProperty -Name IsMember -Value $false
-				$Object | Add-Member -MemberType NoteProperty -Name MembershipCount -Value 0
-			}
-			$Object | Add-Member -MemberType NoteProperty -Name Country -Value $_.UsageLocation
-			$Object | Add-Member -MemberType NoteProperty -Name Memberships -Value $Memberships
-			return $Object
-		}
-	}
-}
-
 function SuspiciousForwardsReport() {
 	$suspicious_forwards = GetSuspiciousForwards
 	$suspicious_rules = GetSuspiciousForwardingRules
