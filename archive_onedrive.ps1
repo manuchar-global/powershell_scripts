@@ -1,6 +1,9 @@
 # This script copies the entire content of a OneDrive to the subfolder named "Archived colleagues" of another OneDrive.
 # Its main purpose is to archive a user's data as he leaves the company.
 
+# Prefer TLS 1.2 to connect.
+[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
+
 # Connect to sharepoint service.
 $credential = Get-Credential
 $admin = $credential.UserName
